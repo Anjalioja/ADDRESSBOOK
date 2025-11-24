@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Address Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<h2>Address Book</h2>
+
+<div class="top-bar">
+
+    <!-- Search -->
+    <form action="/search">
+        <input type="text" name="q" placeholder="Search..." value="{{ search_query if search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Add Contact Button -->
+    <button onclick="openAddModal()">Add New One</button>
+</div>
+
+<!-- TABLE -->
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Address</th>
+         <th>Actions</th>
+    </tr>
+
+    {% for c in contacts %}
+    <tr>
+        <td>{{ c[0] }}</td>
+        <td>{{ c[1] }}</td>
+        <td>{{ c[2] }}</td>
+        <td>{{ c[3] }}</td>
+        <td>{{ c[4] }}</td>
+
+        <td class="actions">
+            <button 
+                onclick="openUpdateModal('{{ c[0] }}','{{ c[1] }}','{{ c[2] }}','{{ c[3] }}','{{ c[4] }}')"
+            >Update</button>
+
+            <a href="/delete/{{ c[0] }}">
+                <button class="delete-btn">Delete</button>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<!-- ADD MODAL -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAdd()">X</span>
+        <h3>Add Contact</h3>
+
+        <form action="/add" method="POST">
+            <input name="name" placeholder="Name" required>
+            <input name="phone" placeholder="Phone" required>
+            <input name="email" placeholder="Email">
+            <input name="address" placeholder="Address">
+           
+
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- UPDATE MODAL -->
+<div id="updateModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeUpdate()">X</span>
+        <h3>Update Contact</h3>
+
+        <form method="POST" id="updateForm">
+            <input type="hidden" name="id" id="u_id">
+
+            <input name="name" id="u_name" placeholder="Name" required>
+            <input name="phone" id="u_phone" placeholder="Phone" required>
+            <input name="email" id="u_email" placeholder="Email">
+            <input name="address" id="u_address" placeholder="Address">
+           
+
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+</html>
